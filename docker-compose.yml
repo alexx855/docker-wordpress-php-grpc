@@ -1,0 +1,55 @@
+version: "3.7"
+
+services:
+    wordpress:
+        build: ./
+        container_name: ${COMPOSE_PROJECT_NAME}_wordpress
+        environment:
+            - WORDPRESS_DB_NAME=${COMPOSE_PROJECT_NAME:-wordpress}
+            - WORDPRESS_TABLE_PREFIX=${WORDPRESS_TABLE_PREFIX:-wp_}
+            - WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST:-mysql}
+            - WORDPRESS_DB_USER=${DATABASE_USER:-root}
+            - WORDPRESS_DB_PASSWORD=${DATABASE_PASSWORD:-password}
+        depends_on:
+            - mysql
+        volumes:
+            - ${WORDPRESS_DATA_DIR:-./wordpress}:/var/www/html
+            # - ./php.conf.ini:/usr/local/etc/php/conf.d/php.ini
+        ports:
+            - "80:80"
+        restart: always
+
+    mysql:
+        image: mariadb:${MARIADB_VERSION:-latest}
+        container_name: ${COMPOSE_PROJECT_NAME}_mysql
+        volumes:
+            - ./mysql:/var/lib/mysql
+        environment:
+            - MYSQL_USER=${DATABASE_USER:-root}
+            - MYSQL_PASSWORD=${DATABASE_PASSWORD:-password}
+            - MYSQL_DATABASE=${COMPOSE_PROJECT_NAME:-wordpress}
+        restart: always
+
+    phpmyadmin:
+        depends_on:
+            - mysql
+        image: phpmyadmin/phpmyadmin:${PHPMYADMIN_VERSION:-latest}
+        container_name: ${COMPOSE_PROJECT_NAME}_phpmyadmin
+        restart: always
+        ports:
+            - "8082:80"
+        environment:
+            PMA_HOST: mysql
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-password}
+
+    wpcli:
+        image: wordpress:cli
+        container_name: ${COMPOSE_PROJECT_NAME}_wpcli
+        volumes:
+            - ${WORDPRESS_DATA_DIR:-./wordpress}:/var/www/html
+        working_dir: /var/www/html
+
+    maildev:
+        image: djfarrelly/maildev
+        ports:
+            - "8081:80"
