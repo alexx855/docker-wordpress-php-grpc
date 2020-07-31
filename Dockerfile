@@ -4,7 +4,7 @@ WORKDIR /var/www/html/
 
 RUN apt-get update && apt-get install -y 
 
-RUN apt-get install libz-dev git zip -y \
+RUN apt-get install libz-dev git zip unzip -y \
     && pecl install grpc \
 	&& docker-php-ext-enable grpc 
 
