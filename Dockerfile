@@ -4,7 +4,7 @@ WORKDIR /var/www/html/
 
 RUN apt-get update && apt-get install -y 
 
-RUN apt-get install libz-dev git zip unzip -y \
+RUN apt-get install libz-dev git zip unzip -y
 
 # we should do this in dev env only, composer should not be available in production
 RUN curl --silent --show-error https://getcomposer.org/installer | php -- \
