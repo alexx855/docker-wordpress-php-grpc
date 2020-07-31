@@ -4,3 +4,4 @@ mysql/*
 #!mysql/.keep
 wordpress/*
 #!wordpress/.keep
+.env
