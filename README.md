@@ -39,10 +39,10 @@ docker-compose down
 rm -rf  mysql/* wordpress/*
 
 # Restore database
-docker exec -i ${COMPOSE_PROJECT_NAME}_mysql mysql -u${DATABASE_USER} -p${DATABASE_PASSWORD} ${COMPOSE_PROJECT_NAME} < database.sql
+docker exec -i example_mysql mysql -uroot -ppassword example < database.sql
 
 # Execute Composer comands
-docker exec -i ${COMPOSE_PROJECT_NAME}_wordpress composer install
+docker exec -i example_wordpress composer install
 ````
 
 ## Windows users
