@@ -3,11 +3,11 @@ version: "3.7"
 services:
   wordpress:
     build: ./
-    container_name: ${COMPOSE_PROJECT_NAME:-example}_wordpress
+    container_name: ${COMPOSE_PROJECT_NAME}_wordpress
     depends_on:
       - mysql
     environment:
-      - WORDPRESS_DB_NAME=${COMPOSE_PROJECT_NAME:-example}
+      - WORDPRESS_DB_NAME=${COMPOSE_PROJECT_NAME:-wordpress}
       - WORDPRESS_TABLE_PREFIX=${WORDPRESS_TABLE_PREFIX:-wp_}
       - WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST:-mysql}
       - WORDPRESS_DB_USER=${DATABASE_USER:-root}
@@ -21,12 +21,12 @@ services:
 
   mysql:
     image: mariadb:${MARIADB_VERSION:-latest}
-    container_name: ${COMPOSE_PROJECT_NAME:-example}_mysql
+    container_name: ${COMPOSE_PROJECT_NAME}_mysql
     environment:
       - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD:-password}
       - MYSQL_USER=${DATABASE_USER:-root}
       - MYSQL_PASSWORD=${DATABASE_PASSWORD:-password}
-      - MYSQL_DATABASE=${COMPOSE_PROJECT_NAME:-example}
+      - MYSQL_DATABASE=${COMPOSE_PROJECT_NAME:-wordpress}
     volumes:
       - ./mysql:/var/lib/mysql
     ports:
@@ -34,7 +34,7 @@ services:
     restart: always
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:${PHPMYADMIN_VERSION:-latest}
-    container_name: ${COMPOSE_PROJECT_NAME:-example}_phpmyadmin
+    container_name: ${COMPOSE_PROJECT_NAME}_phpmyadmin
     depends_on:
       - mysql
     environment:
